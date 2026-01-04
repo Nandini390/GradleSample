@@ -16,9 +16,9 @@ public class Main {
                 .build();
 
         try(Response response = client.newCall(request).execute()){
-             if(!response.isSuccessful()){
-                 System.out.println("Something went wrong");
-             }
+            if(!response.isSuccessful()){
+                System.out.println("Something went wrong");
+            }
             System.out.println(response.body().string());
         }catch(IOException ex){
             ex.printStackTrace();
@@ -29,3 +29,4 @@ public class Main {
 //OkHttp is a third party library, this library helps up to make http call easily
 //***For some fake api: fake store api, jsonplaceholder api, etc
 //The client object above, is responsible for making the TCP connection and above that TCP connection the request is made
+

@@ -69,4 +69,44 @@ tasks.jar {
 
 After this build the project again and execute the jar file.
 
+***
+
+## If I want to add external library and run this from terminal:
+
+we create the jar, after that when we run java -jar....  command, it will give an error
+
+```agsl
+ java.lang.NoClassDefFoundError: okhttp3/OkHttpClient
+```
+
+It means that when jar is created "Gradle builds a plain JAR, so external libraries like OkHttp are not bundled, causing the class to be missing at runtime".
+
+So we include this in build.gradle, inside jar:
+
+```java
+from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+```
+
+Then this error will be resolved but a new error comes:
+
+```agsl
+ duplicate but no duplicate handling strategy has been set
+```
+
+When Gradle creates a JAR, it copies files from dependencies.
+If the same file appears more than once, Gradle throws this error unless you tell it what to do.
+
+So we need to explicitely tell Gradle that
+
+```agsl
+duplicatesStrategy = DuplicatesStrategy.INCLUDE
+````
+Keeps all duplicate files, because you intentionally want every version to be packaged.
+OR
+```agsl
+duplicatesStrategy = DuplicatesStrategy.INCLUDE
+```
+Keeps only one copy and ignores duplicate files, because duplicates are unnecessary and can cause conflicts.
 
